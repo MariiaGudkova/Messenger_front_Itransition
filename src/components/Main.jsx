@@ -53,7 +53,8 @@ function Main() {
               aria-expanded="false"
               aria-controls="flush-collapseOne"
             >
-              Встреча с Мишаней
+              Миша: Встреча с Мишаней
+              {/* {`${sender className="fw-bold"}: ${title}`} */}
             </button>
           </h3>
           <div
@@ -63,7 +64,8 @@ function Main() {
             data-bs-parent="#accordionFlushExample"
           >
             <div className="accordion-body text-start">
-              Очень хочу вернуть тебе долги. 25.11.2022 Миша
+              <p>Очень хочу вернуть тебе долги</p>
+              <p>25.11.2022</p>
             </div>
           </div>
         </div>
@@ -77,7 +79,7 @@ function Main() {
               aria-expanded="false"
               aria-controls="flush-collapseTwo"
             >
-              В ресторан с Машей
+              Маша: В ресторан с Машей
             </button>
           </h3>
           <div
@@ -87,7 +89,8 @@ function Main() {
             data-bs-parent="#accordionFlushExample"
           >
             <div className="accordion-body text-start">
-              Маша очень голодна. 25.11.2022 Маша
+              <p>Маша очень голодна</p>
+              <p>25.11.2022</p>
             </div>
           </div>
         </div>
@@ -101,7 +104,7 @@ function Main() {
               aria-expanded="false"
               aria-controls="flush-collapseThree"
             >
-              Сережа звонил
+              Сережа: Сережа звонил
             </button>
           </h3>
           <div
@@ -111,11 +114,13 @@ function Main() {
             data-bs-parent="#accordionFlushExample"
           >
             <div className="accordion-body text-start">
-              Сережа очень хочет поболтать. 25.11.2022 Сережа
+              <p>Сережа очень хочет поболтать</p>
+              <p>25.11.2022</p>
             </div>
           </div>
         </div>
       </div>
+      <NewMessagePopup />
     </>
   );
 }
