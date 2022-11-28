@@ -1,9 +1,30 @@
+import React from "react";
 import NewMessagePopup from "./NewMessagePopup";
+import Message from "./Message";
 
-function Main() {
+function Main(props) {
+  const { messages, onSendMessage, currentUser } = props;
+
+  const [name, setName] = React.useState("");
+  const [theme, setTheme] = React.useState("");
+  const [text, setText] = React.useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const now = new Date();
+    const time = now.toLocaleString();
+    onSendMessage(currentUser, name, theme, text, time);
+    setName("");
+    setTheme("");
+    setText("");
+  }
+
   return (
     <>
-      <form className="d-flex flex-column align-items-center p-3 mg-5 w-50 bg-opacity-50 shadow p-3 mb-5 bg-body position-relative rounded">
+      <form
+        className="d-flex flex-column align-items-center p-3 mg-5 w-50 bg-opacity-50 shadow p-3 mb-5 bg-body position-relative rounded"
+        onSubmit={handleSubmit}
+      >
         <h1 className="h3 fw-bold text-primary mb-5 mt-3">Новое сообщение</h1>
         <div className="w-75 mb-3">
           <input
@@ -11,6 +32,10 @@ function Main() {
             className="form-control p-2"
             id="exampleFormControlInput1"
             placeholder="Имя получателя"
+            value={name || ""}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
           />
         </div>
         <div className="w-75 mb-3">
@@ -19,6 +44,10 @@ function Main() {
             className="form-control p-2"
             id="exampleFormControlInput1"
             placeholder="Тема"
+            value={theme || ""}
+            onChange={(e) => {
+              setTheme(e.target.value);
+            }}
           />
         </div>
         <div className="w-75 mb-3">
@@ -27,6 +56,10 @@ function Main() {
             id="exampleFormControlTextarea1"
             rows="3"
             placeholder="Ваше сообщение"
+            value={text || ""}
+            onChange={(e) => {
+              setText(e.target.value);
+            }}
           ></textarea>
         </div>
         <button
@@ -43,82 +76,9 @@ function Main() {
         <h2 className="h4 fw-bold text-primary mb-3 mt-3 mx-auto">
           Входящие сообщения
         </h2>
-        <div className="accordion-item rounded">
-          <h3 className="accordion-header" id="flush-headingOne">
-            <button
-              className="accordion-button collapsed btn-outline-primary border border-1 border-primary p-3 rounded"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#flush-collapseOne"
-              aria-expanded="false"
-              aria-controls="flush-collapseOne"
-            >
-              Миша: Встреча с Мишаней
-              {/* {`${sender className="fw-bold"}: ${title}`} */}
-            </button>
-          </h3>
-          <div
-            id="flush-collapseOne"
-            className="accordion-collapse collapse"
-            aria-labelledby="flush-headingOne"
-            data-bs-parent="#accordionFlushExample"
-          >
-            <div className="accordion-body text-start">
-              <p>Очень хочу вернуть тебе долги</p>
-              <p>25.11.2022</p>
-            </div>
-          </div>
-        </div>
-        <div className="accordion-item rounded">
-          <h3 className="accordion-header" id="flush-headingTwo">
-            <button
-              className="accordion-button collapsed btn-outline-primary border border-1 border-primary rounded"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#flush-collapseTwo"
-              aria-expanded="false"
-              aria-controls="flush-collapseTwo"
-            >
-              Маша: В ресторан с Машей
-            </button>
-          </h3>
-          <div
-            id="flush-collapseTwo"
-            className="accordion-collapse collapse"
-            aria-labelledby="flush-headingTwo"
-            data-bs-parent="#accordionFlushExample"
-          >
-            <div className="accordion-body text-start">
-              <p>Маша очень голодна</p>
-              <p>25.11.2022</p>
-            </div>
-          </div>
-        </div>
-        <div className="accordion-item rounded">
-          <h3 className="accordion-header" id="flush-headingThree">
-            <button
-              className="accordion-button collapsed tn-outline-primary border border-1 border-primary rounded"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#flush-collapseThree"
-              aria-expanded="false"
-              aria-controls="flush-collapseThree"
-            >
-              Сережа: Сережа звонил
-            </button>
-          </h3>
-          <div
-            id="flush-collapseThree"
-            className="accordion-collapse collapse"
-            aria-labelledby="flush-headingThree"
-            data-bs-parent="#accordionFlushExample"
-          >
-            <div className="accordion-body text-start">
-              <p>Сережа очень хочет поболтать</p>
-              <p>25.11.2022</p>
-            </div>
-          </div>
-        </div>
+        {[...messages].reverse().map((message) => {
+          return <Message values={message} key={message._id} />;
+        })}
       </div>
       <NewMessagePopup />
     </>
