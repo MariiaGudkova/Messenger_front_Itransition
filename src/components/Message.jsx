@@ -1,23 +1,23 @@
 function Message(props) {
-  const { sender, theme, text, time } = props.values;
+  const { sender, theme, text, time, _id: key } = props.values;
   return (
     <div className="accordion-item rounded">
-      <h3 className="accordion-header" id="flush-headingOne">
+      <h3 className="accordion-header" id={`flush-heading-${key}`}>
         <button
           className="accordion-button collapsed btn-outline-primary border border-1 border-primary p-3 rounded"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#flush-collapseOne"
+          data-bs-target={`#flush-collapse-${key}`}
           aria-expanded="false"
-          aria-controls="flush-collapseOne"
+          aria-controls={`flush-collapse-${key}`}
         >
-          {sender}: {theme}
+          <span className="fw-bold">{sender}</span>: {theme}
         </button>
       </h3>
       <div
-        id="flush-collapseOne"
+        id={`flush-collapse-${key}`}
         className="accordion-collapse collapse"
-        aria-labelledby="flush-headingOne"
+        aria-labelledby={`flush-heading-${key}`}
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body text-start">
