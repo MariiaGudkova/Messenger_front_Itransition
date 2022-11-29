@@ -1,9 +1,10 @@
 import React from "react";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import NewMessagePopup from "./NewMessagePopup";
 import Message from "./Message";
 
 function Main(props) {
-  const { messages, onSendMessage, currentUser } = props;
+  const { messages, allUsers, onSendMessage, currentUser } = props;
 
   const [name, setName] = React.useState("");
   const [theme, setTheme] = React.useState("");
@@ -19,6 +20,30 @@ function Main(props) {
     setText("");
   }
 
+  const handleOnSearch = (string, results) => {
+    console.log(string, results);
+  };
+
+  const handleOnHover = (result) => {
+    console.log(result);
+  };
+
+  const handleOnSelect = (item) => {
+    console.log(item);
+  };
+
+  const handleOnFocus = () => {
+    console.log("Focused");
+  };
+
+  const formatResult = (item) => {
+    return (
+      <>
+        <span style={{ display: "block", textAlign: "left" }}>{item.name}</span>
+      </>
+    );
+  };
+
   return (
     <>
       <form
@@ -27,15 +52,22 @@ function Main(props) {
       >
         <h1 className="h3 fw-bold text-primary mb-5 mt-3">Новое сообщение</h1>
         <div className="w-75 mb-3">
-          <input
-            type="text"
-            className="form-control p-2"
-            id="exampleFormControlInput1"
-            placeholder="Имя получателя"
-            value={name || ""}
-            onChange={(e) => {
-              setName(e.target.value);
+          <ReactSearchAutocomplete
+            items={allUsers.map((user) => ({ id: user._id, name: user.name }))}
+            fuseOptions={{ threshold: 0.0 }}
+            onSearch={handleOnSearch}
+            onHover={handleOnHover}
+            onSelect={handleOnSelect}
+            onFocus={handleOnFocus}
+            autoFocus
+            formatResult={formatResult}
+            showIcon={false}
+            styling={{
+              borderRadius: "0.375rem",
+              height: "40px",
+              boxShadow: "rgb(13, 110, 253, 0.28) 0px 0px 0px 4.2px",
             }}
+            placeholder={"Имя"}
           />
         </div>
         <div className="w-75 mb-3">
