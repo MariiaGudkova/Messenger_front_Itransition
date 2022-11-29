@@ -21,13 +21,20 @@ class Api {
     }).then(this._getJsonOnError).then(res => res.data);
   };
 
+  getAllUsers = () => {
+    return fetch(`${this._baseUrl}/users`, {
+      method: "GET",
+      headers: this._headers,
+    }).then(this._getJsonOnError).then(res => res.data);
+  };
+
   sendMessage = (user, name, theme, text, time) => {
     return fetch(`${this._baseUrl}/sendmessage`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({ user, name, theme, text, time }),
     }).then(this._getJsonOnError).then(res => res.data); 
-  }
+  };
 
   updateToken = (jwt) => {
     this._headers['Authorization'] = `Bearer ${jwt}`;

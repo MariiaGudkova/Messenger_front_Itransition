@@ -11,6 +11,7 @@ import { authorize } from "../utils/auth.js";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
+  const [allUsers, setAllUsers] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(true);
   const [messages, setMessages] = React.useState([]);
   const history = useHistory();
@@ -18,6 +19,7 @@ function App() {
   React.useEffect(() => {
     if (loggedIn) {
       getApiUserInfo();
+      getAllUsers();
     }
   }, [loggedIn]);
 
@@ -44,6 +46,15 @@ function App() {
       const userInfo = await api.getUserInfo();
       setCurrentUser(userInfo.name);
       setMessages(userInfo.messages);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function getAllUsers() {
+    try {
+      const users = await api.getAllUsers();
+      setAllUsers(users);
     } catch (e) {
       console.error(e);
     }
@@ -96,6 +107,7 @@ function App() {
           />
           <Main
             messages={messages}
+            allUsers={allUsers}
             onSendMessage={sendMessage}
             currentUser={currentUser}
           />
