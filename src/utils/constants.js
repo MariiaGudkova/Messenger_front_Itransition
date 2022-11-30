@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://messengerapiitransition-production.up.railway.app';
+export const BASE_URL = 'https://messengerapiitransition-production.up.railway.app/';
