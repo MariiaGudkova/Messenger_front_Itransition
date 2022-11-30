@@ -12,14 +12,36 @@ import { authorize } from "../utils/auth.js";
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [allUsers, setAllUsers] = React.useState([]);
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
   const [messages, setMessages] = React.useState([]);
+  const oldMessages = React.useRef(messages);
+  const [show, setShow] = React.useState(false);
+  const toggleShow = () => setShow(!show);
   const history = useHistory();
+  const intervalId = React.useRef(null);
 
   React.useEffect(() => {
     if (loggedIn) {
       getApiUserInfo();
       getAllUsers();
+      intervalId.current = setInterval(
+        () =>
+          api.getUserInfo().then(({ messages: newMessages }) => {
+            const oldMessagesLength = oldMessages.current.length;
+            setMessages(newMessages);
+            if (newMessages.length > oldMessagesLength) {
+              setShow(true);
+            } else {
+              setShow(false);
+            }
+            console.log({ oldMessages: oldMessages.current, newMessages });
+            oldMessages.current = newMessages;
+          }),
+        5000
+      );
+    } else {
+      clearInterval(intervalId.current);
+      intervalId.current = null;
     }
   }, [loggedIn]);
 
@@ -43,9 +65,10 @@ function App() {
 
   async function getApiUserInfo() {
     try {
-      const userInfo = await api.getUserInfo();
-      setCurrentUser(userInfo.name);
-      setMessages(userInfo.messages);
+      const { name, messages } = await api.getUserInfo();
+      setCurrentUser(name);
+      setMessages(messages);
+      oldMessages.current = messages;
     } catch (e) {
       console.error(e);
     }
@@ -94,6 +117,8 @@ function App() {
     localStorage.removeItem("jwt");
     history.push(routes.signIn);
     setLoggedIn(false);
+    clearInterval(intervalId.current);
+    intervalId.current = null;
   }
 
   return (
@@ -104,16 +129,19 @@ function App() {
             linkAdress={routes.signIn}
             buttonText={"Выйти"}
             onLogoutUserProfile={logoutUserProfile}
+            isShown={loggedIn}
           />
           <Main
             messages={messages}
             allUsers={allUsers}
+            show={show}
+            onToggleShow={toggleShow}
             onSendMessage={sendMessage}
             currentUser={currentUser}
           />
         </ProtectedRoute>
         <Route path={routes.signIn}>
-          <Header linkAdress={routes.signIn} buttonText={"Войти"} />
+          <Header />
           <LoginForm onLogin={hanldeLogin} />
         </Route>
       </Switch>
