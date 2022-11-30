@@ -34,7 +34,6 @@ function App() {
             } else {
               setShow(false);
             }
-            console.log({ oldMessages: oldMessages.current, newMessages });
             oldMessages.current = newMessages;
           }),
         5000
